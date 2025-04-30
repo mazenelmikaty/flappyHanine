@@ -1,3 +1,4 @@
+/* Remove default margin, prevent scrolling, center text, and set black background */
 body {
     margin: 0;
     overflow: hidden;
@@ -5,45 +6,102 @@ body {
     background: #000;
 }
 
-canvas {
-    display: block;
-    background: url('images/bg.jpg') no-repeat center center/cover;
-
+.canvas-wrapper {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    height: 100vh;           /* Full viewport height */
 }
 
+
+/* Style the canvas element with a full-screen background image */
+canvas {
+    display: block;
+    background: url('images/bg.jpg') no-repeat center center/cover; /* background image for the game canvas */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); /* Optional: add shadow for better visual effect */
+}
+
+/* Style for the game over screen that appears centered on the page */
 #game-over-screen {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); /* center the div */
     text-align: center;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.8); /* semi-transparent dark background */
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 10px; /* rounded corners */
 }
 
+/* Style for the image shown on game over screen (bad or win image) */
 #game-over-screen img {
     width: 300px;
-    border-radius: 10px;
+    border-radius: 10px; /* rounded image corners */
 }
 
+/* Style for buttons (restart, etc.) */
 button {
     padding: 10px 20px;
     margin-top: 10px;
     font-size: 18px;
-    cursor: pointer;
+    cursor: pointer; /* pointer cursor on hover */
 }
 
+/* Utility class to hide elements */
 .hidden {
     display: none;
 }
 
+/* Title text styling */
 #game-title {
     color: aqua;
     font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Start message text styling */
 #start-message {
     color: white;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+#hanine-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    z-index: 10;
+    max-width: 80%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+#letter-box {
+    margin-top: 20px;
+    font-size: 50px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#letter-box:hover {
+    transform: scale(1.1);
+}
+
+#letter-content {
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 18px;
+    color: #444;
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

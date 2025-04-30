@@ -1,19 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive scaling for mobile -->
     <title>Flappy Hanine</title>
+
+    <!-- Link to external CSS file for styling -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <!-- Game Title Header -->
     <h1 id="game-title">Flappy Hanounaaa!!</h1>
+
+    <!-- Initial message prompting user to press SPACE to start -->
     <p id="start-message">Click SPACE to start!</p>
-    <canvas id="gameCanvas" class="hidden"></canvas>
+
+    <!-- Wrap the canvas in a container -->
+    <div class="canvas-wrapper hidden" id="canvas-wrapper">
+        <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <!-- Game over screen (initially hidden, shown on loss or win) -->
     <div id="game-over-screen" class="hidden">
+        <!-- Image shown on game over (either fail or win image based on result) -->
         <img id="game-over-img" src="bad.png" alt="Game Over">
+
+        <!-- Button to restart the game, triggers the restartGame() JS function -->
         <button onclick="restartGame()">Try Again</button>
     </div>
+
+    <div id="hanine-message" class="hidden">
+        <p>If you're not Hanine, please close the window.<br>If you are Hanine, click on the box.</p>
+        <div id="letter-box">📩 Click me</div>
+        <div id="letter-content" class="hidden">
+            <!-- You will write your letter here -->
+            <p id="letter-text">[Your message will appear here]</p>
+        </div>
+    </div>
+    
+
+    <!-- Link to external JavaScript file containing game logic -->
     <script src="script.js"></script>
 </body>
+
 </html>

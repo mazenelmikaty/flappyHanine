@@ -1,26 +1,33 @@
+// Get the canvas element and its 2D rendering context
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 480;
-canvas.height = 640;
+// Set canvas dimensions
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas(); // Initial call
 
-// Load images
+
+// Load image assets
 const playerImg = new Image();
-playerImg.src = "images/gf.png";  // Her picture as the player
+playerImg.src = "images/gf.png";  // Image of the girl (player)
 
 const pipeTop = new Image();
-pipeTop.src = "images/pipe-top.png";
+pipeTop.src = "images/pipe-top.png";  // Top pipe obstacle
 
 const pipeBottom = new Image();
-pipeBottom.src = "images/pipe-bottom.png";
+pipeBottom.src = "images/pipe-bottom.png";  // Bottom pipe obstacle
 
 const badImg = new Image();
-badImg.src = "images/bad.png";  // Bad picture on fail
+badImg.src = "images/bad.png";  // Shown on losing the game
 
 const winImg = new Image();
-winImg.src = "images/win.png";  // Your picture together for winning
+winImg.src = "images/win.png";  // Shown on winning the game
 
-// Player properties
+// Define player properties
 let player = {
     x: 50,
     y: canvas.height / 2,
@@ -31,46 +38,46 @@ let player = {
     jumpPower: -8
 };
 
-// Pipe properties
-let pipes = [];
+// Define pipe properties
+let pipes = [];  // Array to store pipes
 const pipeWidth = 150;
 const pipeGap = 200;
 const pipeSpeed = 2;
 
-// Game variables
+// Define game state variables
 let score = 0;
 let fails = 0;
 let isGameOver = false;
-let gameStarted = false; 
+let gameStarted = false;
 
-// Add pipes at intervals
+// Function to create a new pipe pair with random top height
 function generatePipe() {
     let topHeight = Math.floor(Math.random() * (canvas.height / 2));
     let bottomY = topHeight + pipeGap;
     pipes.push({ x: canvas.width, topHeight, bottomY });
 }
 
-// Player jump
+// Event listener to handle space key press (jump and game start)
 document.addEventListener("keydown", function (event) {
     if (event.code === "Space") {
         if (!gameStarted) {
-            gameStarted = true;  // Start the game on first keypress
-            document.getElementById("gameCanvas").classList.remove("hidden"); // Show the canvas
-            document.getElementById("start-message").classList.add("hidden"); // Remove start message
+            gameStarted = true;  // Start the game
+            document.getElementById("canvas-wrapper").classList.remove("hidden"); // Show canvas
+            document.getElementById("start-message").classList.add("hidden"); // Hide start message
         }
-        player.velocity = player.jumpPower;
+        player.velocity = player.jumpPower;  // Make the player jump
     }
 });
 
-
-// Game loop
+// Game update loop: handles physics, pipe movement, collision, and win/loss logic
 function update() {
-    if (!gameStarted || isGameOver) return;  // Stop updating if game hasn't started
+    if (!gameStarted || isGameOver) return;
 
+    // Apply gravity to player
     player.velocity += player.gravity;
     player.y += player.velocity;
 
-    // Pipe movement
+    // Move pipes and check for collisions
     for (let i = 0; i < pipes.length; i++) {
         pipes[i].x -= pipeSpeed;
 
@@ -82,47 +89,47 @@ function update() {
         ) {
             fails++;
             if (fails >= 20) {
-                showGameOver();
+                showGameOver();  // Trigger game over after 20 fails
                 return;
             }
         }
 
-        // Remove pipes that have moved off screen
+        // Remove off-screen pipes and increase score
         if (pipes[i].x + pipeWidth < 0) {
             pipes.splice(i, 1);
             score++;
         }
     }
 
-    // Check for win condition
+    // Check if player has won
     if (score >= 10) {
-        showWinScreen();
+        showWinScreen();  // Trigger win screen
         return;
     }
 
-    draw();
+    draw();  // Draw updated game state
 }
 
-// Draw game elements
+// Render all game elements
 function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);  // Clear canvas
 
-    // Draw pipes
+    // Draw all pipes
     for (let pipe of pipes) {
         ctx.drawImage(pipeTop, pipe.x, 0, pipeWidth, pipe.topHeight);
         ctx.drawImage(pipeBottom, pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
     }
 
-    // Draw player
+    // Draw the player
     ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
 
-    // Draw score
+    // Display score and fail count
     ctx.fillStyle = "white";
     ctx.font = "20px Arial";
     ctx.fillText(`Score: ${score}`, 10, 30);
     ctx.fillText(`Fails: ${fails}/20`, 10, 60);
 
-    // Show "Press Space to Start" if the game hasn't started
+    // Show start message if game hasn't started yet
     if (!gameStarted) {
         ctx.fillStyle = "white";
         ctx.font = "24px Arial";
@@ -131,21 +138,23 @@ function draw() {
     }
 }
 
-// Show game over screen
+// Show game over screen with failure image
 function showGameOver() {
     isGameOver = true;
     document.getElementById("game-over-screen").classList.remove("hidden");
     document.getElementById("game-over-img").src = badImg.src;
+    document.getElementById("canvas-wrapper").classList.add("hidden");
 }
 
-// Show win screen
+// Show winning screen with success image
 function showWinScreen() {
     isGameOver = true;
     document.getElementById("game-over-screen").classList.remove("hidden");
+    document.getElementById("canvas-wrapper").classList.add("hidden");
     document.getElementById("game-over-img").src = winImg.src;
 }
 
-// Restart game
+// Reset game variables to restart the game
 function restartGame() {
     player.y = canvas.height / 2;
     player.velocity = 0;
@@ -155,12 +164,43 @@ function restartGame() {
     isGameOver = false;
     gameStarted = false;
     document.getElementById("game-over-screen").classList.add("hidden");
+    document.getElementById("start-message").classList.remove("hidden");
 }
 
-// Generate pipes every 2 seconds (only after the game starts)
+function showWinScreen() {
+    isGameOver = true;
+    document.getElementById("game-over-screen").classList.remove("hidden");
+    document.getElementById("canvas-wrapper").classList.add("hidden");
+    document.getElementById("game-over-img").src = winImg.src;
+
+    // After a short delay, show the special message
+    setTimeout(() => {
+        document.getElementById("game-over-screen").classList.add("hidden");
+        document.getElementById("hanine-message").classList.remove("hidden");
+    }, 2000); // Delay of 2 seconds
+}
+
+document.getElementById("letter-box").addEventListener("click", () => {
+    document.getElementById("letter-content").classList.remove("hidden");
+
+    // Add your message here
+    document.getElementById("letter-text").innerText = `
+        Dear Hanine,
+
+        Congratulations on winning the game 🏆!
+        I just wanted to tell you how amazing you are.
+        This little game was just an excuse to make you smile.
+
+        Yours always,
+        Mouzi 💖
+    `;
+});
+
+
+// Generate new pipe every 2.75 seconds (after game has started)
 setInterval(() => {
     if (gameStarted) generatePipe();
 }, 2750);
 
-// Start game loop
+// Main game loop runs every 20 milliseconds
 setInterval(update, 20);
