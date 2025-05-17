@@ -2,8 +2,12 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+const groundHeight = 70;
+let groundLevel;
+
+
 function resizeCanvas() {
-    const isMobile = window.innerWidth <= 768; // You can adjust this breakpoint
+    const isMobile = window.innerWidth <= 768;
 
     if (isMobile) {
         canvas.width = window.innerWidth;
@@ -12,7 +16,10 @@ function resizeCanvas() {
         canvas.width = window.innerWidth * 0.5;
         canvas.height = window.innerHeight * 0.75;
     }
+
+    groundLevel = canvas.height - groundHeight; // Reset ground level after resize
 }
+
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas(); // Initial call
@@ -33,6 +40,10 @@ badImg.src = "images/bad.png";  // Shown on losing the game
 
 const winImg = new Image();
 winImg.src = "images/win.png";  // Shown on winning the game
+
+const cakeTopImg = new Image(); // Ground
+cakeTopImg.src = "images/cake-top.png";
+
 
 // Define player properties
 let player = {
@@ -93,6 +104,18 @@ function update() {
     player.velocity += player.gravity;
     player.y += player.velocity;
 
+    // Prevent player from falling below the ground
+    if (player.y + player.height > groundLevel) {
+        player.y = groundLevel - player.height;
+        player.velocity = 0;
+    }
+
+    // Optional: prevent the player from going above the canvas
+    if (player.y < 0) {
+        player.y = 0;
+        player.velocity = 0;
+    }
+
     // Move candels and check for collisions
     for (let i = 0; i < candels.length; i++) {
         candels[i].x -= candelSpeed;
@@ -126,6 +149,7 @@ function update() {
     draw();  // Draw updated game state
 }
 
+
 // Render all game elements
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);  // Clear canvas
@@ -138,6 +162,7 @@ function draw() {
 
     // Draw the player
     ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+    
 
     // Display score and fail count
     ctx.fillStyle = "red";
@@ -152,7 +177,24 @@ function draw() {
         ctx.textAlign = "center";
         ctx.fillText("Press SPACE to Start", canvas.width / 2, canvas.height / 2);
     }
+
+    // Draw ground line
+    drawGround();
+
 }
+function drawGround() {
+    if (cakeTopImg.complete) {
+        const scaledHeight = groundHeight;
+        const aspectRatio = cakeTopImg.width / cakeTopImg.height;
+        const scaledWidth = scaledHeight * aspectRatio;
+
+        for (let x = 0; x < canvas.width; x += scaledWidth) {
+            ctx.drawImage(cakeTopImg, x, canvas.height - scaledHeight, scaledWidth, scaledHeight);
+        }
+    }
+}
+
+
 
 // Show game over screen with failure image
 function showGameOver() {
