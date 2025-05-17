@@ -2,10 +2,16 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// Set canvas dimensions
 function resizeCanvas() {
-    canvas.width = Math.min(window.innerWidth, 601); // Max width 600px
-    canvas.height = canvas.width * 1.5; // Maintain aspect ratio
+    const isMobile = window.innerWidth <= 768; // You can adjust this breakpoint
+
+    if (isMobile) {
+        canvas.width = window.innerWidth * 0.95;
+        canvas.height = window.innerHeight * 0.6;
+    } else {
+        canvas.width = window.innerWidth * 0.5;
+        canvas.height = window.innerHeight * 0.75;
+    }
 }
 
 window.addEventListener('resize', resizeCanvas);
@@ -32,18 +38,18 @@ winImg.src = "images/win.png";  // Shown on winning the game
 let player = {
     x: 50,
     y: canvas.height / 2,
-    width: 70,
-    height: 90,
-    gravity: 0.5,
+    width: 55,
+    gravity: 0.2,
     velocity: 0,
-    jumpPower: -8
+    jumpPower: -5
 };
+player.height = player.width * 1.5;
 
 // Define candel properties
 let candels = [];  // Array to store candels
 const candelWidth = 75;
-const candelGap = 130;
-const candelSpeed = 7;
+const candelGap = 175;
+const candelSpeed = 2;
 let score = 0;
 let fails = 0;
 let isGameOver = false;

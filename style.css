@@ -22,6 +22,28 @@ canvas {
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); /* Optional: add shadow for better visual effect */
 }
 
+/* Add to your style.css */
+.canvas-border {
+    position: relative;
+    padding: 15px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.canvas-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    padding: 3px;
+    background: linear-gradient(45deg, #ff8a00, #e52e71, #2575fc);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
 /* Style for the game over screen that appears centered on the page */
 #game-over-screen {
     position: absolute;
