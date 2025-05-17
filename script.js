@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 
 // Set canvas dimensions
 function resizeCanvas() {
-    canvas.width = Math.min(window.innerWidth, 600); // Max width 600px
+    canvas.width = Math.min(window.innerWidth, 601); // Max width 600px
     canvas.height = canvas.width * 1.5; // Maintain aspect ratio
 }
 
