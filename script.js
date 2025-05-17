@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 
 // Set canvas dimensions
 function resizeCanvas() {
-    canvas.width = window.innerWidth * 0.75;
+    canvas.width = window.innerWidth * 0.5;
     canvas.height = window.innerHeight * 0.75;
 }
 window.addEventListener('resize', resizeCanvas);
@@ -15,11 +15,11 @@ resizeCanvas(); // Initial call
 const playerImg = new Image();
 playerImg.src = "images/gf.png";  // Image of the girl (player)
 
-const pipeTop = new Image();
-pipeTop.src = "images/pipe-top.png";  // Top pipe obstacle
+const candelTop = new Image();
+candelTop.src = "images/candel-top.png";  // Top candel obstacle
 
-const pipeBottom = new Image();
-pipeBottom.src = "images/pipe-bottom.png";  // Bottom pipe obstacle
+const candelBottom = new Image();
+candelBottom.src = "images/candel-bottom.png";  // Bottom candel obstacle
 
 const badImg = new Image();
 badImg.src = "images/bad.png";  // Shown on losing the game
@@ -31,30 +31,28 @@ winImg.src = "images/win.png";  // Shown on winning the game
 let player = {
     x: 50,
     y: canvas.height / 2,
-    width: 40,
-    height: 40,
+    width: 70,
+    height: 90,
     gravity: 0.5,
     velocity: 0,
     jumpPower: -8
 };
 
-// Define pipe properties
-let pipes = [];  // Array to store pipes
-const pipeWidth = 150;
-const pipeGap = 200;
-const pipeSpeed = 2;
-
-// Define game state variables
+// Define candel properties
+let candels = [];  // Array to store candels
+const candelWidth = 75;
+const candelGap = 130;
+const candelSpeed = 7;
 let score = 0;
 let fails = 0;
 let isGameOver = false;
 let gameStarted = false;
 
-// Function to create a new pipe pair with random top height
-function generatePipe() {
+// Function to create a new candel pair with random top height
+function generatecandel() {
     let topHeight = Math.floor(Math.random() * (canvas.height / 2));
-    let bottomY = topHeight + pipeGap;
-    pipes.push({ x: canvas.width, topHeight, bottomY });
+    let bottomY = topHeight + candelGap;
+    candels.push({ x: canvas.width, topHeight, bottomY });
 }
 
 // Event listener to handle space key press (jump and game start)
@@ -69,7 +67,18 @@ document.addEventListener("keydown", function (event) {
     }
 });
 
-// Game update loop: handles physics, pipe movement, collision, and win/loss logic
+// Event listener to handle touch start (jump and game start on mobile)
+document.addEventListener("touchstart", function () {
+    if (!gameStarted) {
+        gameStarted = true;  // Start the game
+        document.getElementById("canvas-wrapper").classList.remove("hidden"); // Show canvas
+        document.getElementById("start-message").classList.add("hidden"); // Hide start message
+    }
+    player.velocity = player.jumpPower;  // Make the player jump
+});
+
+
+// Game update loop: handles physics, candel movement, collision, and win/loss logic
 function update() {
     if (!gameStarted || isGameOver) return;
 
@@ -77,15 +86,15 @@ function update() {
     player.velocity += player.gravity;
     player.y += player.velocity;
 
-    // Move pipes and check for collisions
-    for (let i = 0; i < pipes.length; i++) {
-        pipes[i].x -= pipeSpeed;
+    // Move candels and check for collisions
+    for (let i = 0; i < candels.length; i++) {
+        candels[i].x -= candelSpeed;
 
         // Collision detection
         if (
-            player.x < pipes[i].x + pipeWidth &&
-            player.x + player.width > pipes[i].x &&
-            (player.y < pipes[i].topHeight || player.y + player.height > pipes[i].bottomY)
+            player.x < candels[i].x + candelWidth &&
+            player.x + player.width > candels[i].x &&
+            (player.y < candels[i].topHeight || player.y + player.height > candels[i].bottomY)
         ) {
             fails++;
             if (fails >= 20) {
@@ -94,9 +103,9 @@ function update() {
             }
         }
 
-        // Remove off-screen pipes and increase score
-        if (pipes[i].x + pipeWidth < 0) {
-            pipes.splice(i, 1);
+        // Remove off-screen candels and increase score
+        if (candels[i].x + candelWidth < 0) {
+            candels.splice(i, 1);
             score++;
         }
     }
@@ -114,19 +123,19 @@ function update() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);  // Clear canvas
 
-    // Draw all pipes
-    for (let pipe of pipes) {
-        ctx.drawImage(pipeTop, pipe.x, 0, pipeWidth, pipe.topHeight);
-        ctx.drawImage(pipeBottom, pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
+    // Draw all candels
+    for (let candel of candels) {
+        ctx.drawImage(candelTop, candel.x, 0, candelWidth, candel.topHeight);
+        ctx.drawImage(candelBottom, candel.x, candel.bottomY, candelWidth, canvas.height - candel.bottomY);
     }
 
     // Draw the player
     ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
 
     // Display score and fail count
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "red";
     ctx.font = "20px Arial";
-    ctx.fillText(`Score: ${score}`, 10, 30);
+    ctx.fillText(`Score: ${score}/10`, 10, 30);
     ctx.fillText(`Fails: ${fails}/20`, 10, 60);
 
     // Show start message if game hasn't started yet
@@ -158,7 +167,7 @@ function showWinScreen() {
 function restartGame() {
     player.y = canvas.height / 2;
     player.velocity = 0;
-    pipes = [];
+    candels = [];
     score = 0;
     fails = 0;
     isGameOver = false;
@@ -197,9 +206,9 @@ document.getElementById("letter-box").addEventListener("click", () => {
 });
 
 
-// Generate new pipe every 2.75 seconds (after game has started)
+// Generate new candel every 2.75 seconds (after game has started)
 setInterval(() => {
-    if (gameStarted) generatePipe();
+    if (gameStarted) generatecandel();
 }, 2750);
 
 // Main game loop runs every 20 milliseconds

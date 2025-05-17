@@ -18,7 +18,7 @@ body {
 /* Style the canvas element with a full-screen background image */
 canvas {
     display: block;
-    background: url('images/BG.jpg') no-repeat center center/cover; /* background image for the game canvas */
+    background: url('images/BG.jpg') no-repeat center center/cover; /*background image for the game canvas */
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); /* Optional: add shadow for better visual effect */
 }
 

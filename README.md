@@ -4,14 +4,14 @@ A custom-made, Flappy Bird–inspired game built with HTML, CSS, and JavaScript 
 
 ## 💡 About the Game
 
-In this sweet and simple game, a flying girl must avoid pipes to rack up points. If she succeeds, something magical happens…
+In this sweet and simple game, a flying girl must avoid candels to rack up points. If she succeeds, something magical happens…
 
 > ✨ A personal message just for **Hanine** will be revealed at the end — but only if she wins the game 😉
 
 ## 🎮 How to Play
 
 - Press the `Space` key to start the game and make the player jump.
-- Avoid the top and bottom pipes — you can fail up to 20 times.
+- Avoid the top and bottom candels — you can fail up to 20 times.
 - Score 10 points to win and unlock the birthday message.
 
 ## 🎁 Birthday Surprise
@@ -24,7 +24,7 @@ Clicking the box reveals a birthday letter — written from the heart 💌
 
 ## ✨ Features
 
-- **Custom artwork** for pipes, background, and the player
+- **Custom artwork** for candels, background, and the player
 - Smooth game loop and physics using HTML5 `<canvas>`
 - A surprise win screen and hidden birthday letter
 - Works on both desktop and mobile screens
@@ -33,7 +33,7 @@ Clicking the box reveals a birthday letter — written from the heart 💌
 - index.html        # The game's HTML structure
 - style.css         # Visual styling
 - script.js         # Game logic and mechanics
-- images/           # Game assets (player, pipes, background, win/lose images)
+- images/           # Game assets (player, candels, background, win/lose images)
 
 
 ## 🛠 Built With
