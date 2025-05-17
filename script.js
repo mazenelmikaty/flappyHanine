@@ -6,8 +6,8 @@ function resizeCanvas() {
     const isMobile = window.innerWidth <= 768; // You can adjust this breakpoint
 
     if (isMobile) {
-        canvas.width = window.innerWidth * 0.95;
-        canvas.height = window.innerHeight * 0.6;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     } else {
         canvas.width = window.innerWidth * 0.5;
         canvas.height = window.innerHeight * 0.75;
