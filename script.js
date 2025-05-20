@@ -261,4 +261,8 @@ setInterval(() => {
 }, 2750);
 
 // Main game loop runs every 20 milliseconds
-setInterval(update, 20);
+function gameLoop() {
+    update();
+    requestAnimationFrame(gameLoop);
+}
+gameLoop();
