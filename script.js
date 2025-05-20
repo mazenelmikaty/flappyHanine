@@ -132,14 +132,24 @@ function restartGame() {
 
 // Event listener for the letter box (Hanine's message)
 document.getElementById("letter-box").addEventListener("click", () => {
+    // Hide the letter box and show the content
+    document.getElementById("letter-box").classList.add("hidden");
+    document.getElementById("congrats-message").classList.add("hidden");
+    document.getElementById("congrats-parag").classList.add("hidden");
     const letterContentDiv = document.getElementById("letter-content");
 
-    // Fetch the letter content from the external file
-    fetch("letter-content.html")
-        .then(response => response.text())
+    // Fetch the content from the external .txt file
+    fetch("letter-content.txt")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        })
         .then(data => {
-            letterContentDiv.innerHTML = data; // Insert the content into the div
-            letterContentDiv.classList.remove("hidden"); // Show the letter content
+            // Insert the fetched content into the div and make it visible
+            letterContentDiv.innerHTML = data;
+            letterContentDiv.classList.remove("hidden");
         })
         .catch(error => console.error("Error loading letter content:", error));
 });
@@ -189,7 +199,7 @@ function update() {
     }
 
     // Check if player has won
-    if (score >= 10) {
+    if (score >= 1) {
         showWinScreen(); // Trigger win screen
         return;
     }

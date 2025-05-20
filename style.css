@@ -24,8 +24,7 @@ body {
     display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center;     /* Center vertically */
-    height: 100vh;           /* Full viewport height */
-    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
     margin: 0;
     padding: 0;
 }
@@ -41,9 +40,7 @@ canvas {
 /* Add to your style.css */
 .canvas-border {
     position: relative;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    padding: 0; /* Remove padding */
+    padding: 3; /* Remove padding */
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     border-radius: 0; /* Remove rounded corners for full screen */
     box-shadow: none; /* Remove shadow for a cleaner look */
