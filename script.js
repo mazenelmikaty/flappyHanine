@@ -58,8 +58,8 @@ player.height = player.width * 1.5;
 
 // Define candel properties
 let candels = [];  // Array to store candels
-const candelWidth = 75;
-const candelGap = 175;
+const candelWidth = 50;
+const candelGap = 200;  // Gap between top and bottom candels
 const candelSpeed = 2;
 let score = 0;
 let fails = 0;
@@ -79,7 +79,8 @@ document.addEventListener("keydown", function (event) {
         if (!gameStarted) {
             gameStarted = true;  // Start the game
             document.getElementById("canvas-wrapper").classList.remove("hidden"); // Show canvas
-            document.getElementById("start-message").classList.add("hidden"); // Hide start message
+            hideDiv("start-message"); // Hide start message
+
         }
         player.velocity = player.jumpPower;  // Make the player jump
     }
@@ -90,11 +91,58 @@ document.addEventListener("touchstart", function () {
     if (!gameStarted) {
         gameStarted = true;  // Start the game
         document.getElementById("canvas-wrapper").classList.remove("hidden"); // Show canvas
-        document.getElementById("start-message").classList.add("hidden"); // Hide start message
+        hideDiv("start-message"); // Hide start message
     }
     player.velocity = player.jumpPower;  // Make the player jump
 });
 
+
+// Show game over screen with failure image (for losing only)
+function showGameOver() {
+    isGameOver = true;
+    showDiv("game-over-screen"); // Show game over screen
+    document.getElementById("game-over-img").src = badImg.src; // Set losing image
+    document.getElementById("canvas-wrapper").classList.add("hidden"); // Hide the canvas
+}
+
+// Show winning screen (display Hanine's message)
+function showWinScreen() {
+    isGameOver = true;
+    document.getElementById("canvas-wrapper").classList.add("hidden"); // Hide the canvas
+
+    // Show Hanine's special message
+    document.getElementById("hanine-message").classList.remove("hidden");
+}
+
+// Reset game variables to restart the game
+function restartGame() {
+    player.y = canvas.height / 2;
+    player.velocity = 0;
+    candels = [];
+    score = 0;
+    fails = 0;
+    isGameOver = false;
+    gameStarted = false;
+
+    // Hide all screens and show the canvas
+    hideDiv("game-over-screen");
+    document.getElementById("hanine-message").classList.add("hidden");
+    showDiv("start-message");
+}
+
+// Event listener for the letter box (Hanine's message)
+document.getElementById("letter-box").addEventListener("click", () => {
+    const letterContentDiv = document.getElementById("letter-content");
+
+    // Fetch the letter content from the external file
+    fetch("letter-content.html")
+        .then(response => response.text())
+        .then(data => {
+            letterContentDiv.innerHTML = data; // Insert the content into the div
+            letterContentDiv.classList.remove("hidden"); // Show the letter content
+        })
+        .catch(error => console.error("Error loading letter content:", error));
+});
 
 // Game update loop: handles physics, candel movement, collision, and win/loss logic
 function update() {
@@ -128,7 +176,7 @@ function update() {
         ) {
             fails++;
             if (fails >= 20) {
-                showGameOver();  // Trigger game over after 20 fails
+                showGameOver(); // Trigger game over after 20 fails
                 return;
             }
         }
@@ -142,11 +190,11 @@ function update() {
 
     // Check if player has won
     if (score >= 10) {
-        showWinScreen();  // Trigger win screen
+        showWinScreen(); // Trigger win screen
         return;
     }
 
-    draw();  // Draw updated game state
+    draw(); // Draw updated game state
 }
 
 
@@ -196,73 +244,24 @@ function drawGround() {
 
 
 
-// Show game over screen with failure image
-function showGameOver() {
-    isGameOver = true;
-    document.getElementById("game-over-screen").classList.remove("hidden");
-    document.getElementById("game-over-img").src = badImg.src;
-    document.getElementById("canvas-wrapper").classList.add("hidden");
-}
-
-// Show winning screen with success image
-function showWinScreen() {
-    isGameOver = true;
-    document.getElementById("game-over-screen").classList.remove("hidden");
-    document.getElementById("canvas-wrapper").classList.add("hidden");
-    document.getElementById("game-over-img").src = winImg.src;
-}
-
-// Reset game variables to restart the game
-function restartGame() {
-    player.y = canvas.height / 2;
-    player.velocity = 0;
-    candels = [];
-    score = 0;
-    fails = 0;
-    isGameOver = false;
-    gameStarted = false;
-    document.getElementById("game-over-screen").classList.add("hidden");
-    document.getElementById("start-message").classList.remove("hidden");
-}
-
-function showWinScreen() {
-    isGameOver = true;
-    document.getElementById("game-over-screen").classList.remove("hidden");
-    document.getElementById("canvas-wrapper").classList.add("hidden");
-    document.getElementById("game-over-img").src = winImg.src;
-
-    // After a short delay, show the special message
-    setTimeout(() => {
-        document.getElementById("game-over-screen").classList.add("hidden");
-        document.getElementById("hanine-message").classList.remove("hidden");
-    }, 2000); // Delay of 2 seconds
-}
-
-document.getElementById("letter-box").addEventListener("click", () => {
-    document.getElementById("letter-content").classList.remove("hidden");
-
-    // Add your message here
-    document.getElementById("letter-text").innerText = `
-        Dear Hanine,
-
-        Congratulations on winning the game 🏆!
-        I just wanted to tell you how amazing you are.
-        This little game was just an excuse to make you smile.
-
-        Yours always,
-        Mouzi 💖
-    `;
-});
-
-
-// Generate new candel every 2.75 seconds (after game has started)
-setInterval(() => {
-    if (gameStarted) generatecandel();
-}, 2750);
-
 // Main game loop runs every 20 milliseconds
 function gameLoop() {
     update();
     requestAnimationFrame(gameLoop);
 }
 gameLoop();
+
+// Generate new candel every 2.75 seconds (after game has started)
+setInterval(() => {
+    if (gameStarted) generatecandel();
+}, 2750);
+
+// Helper funtion to show and hide divs
+function showDiv(divId) {
+    document.getElementById(divId).classList.remove("hidden");
+    document.getElementById(divId).classList.add("flex");
+}
+function hideDiv(divId) {
+    document.getElementById(divId).classList.add("hidden");
+    document.getElementById(divId).classList.remove("flex");
+}

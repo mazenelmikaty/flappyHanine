@@ -12,6 +12,15 @@
 
 <body>
 
+    <!-- Welcome message -->
+    <div id="start-message" class="flex">
+        <h1>Welcome to Flappy Hanine!</h1>
+        <br>
+        <h3>Help Hanine's Balloon to reach the Prize!</h3>
+        <br>
+         <p>Press SPACE to Start</p>
+    </div>
+
     <!-- Wrap the canvas in a container -->
     <div class="canvas-wrapper hidden" id="canvas-wrapper">
         <div class="canvas-border">
@@ -19,24 +28,25 @@
         </div>
     </div>
 
-    <!-- Game over screen (initially hidden, shown on loss or win) -->
+    <!-- Game over screen (for losing only) -->
     <div id="game-over-screen" class="hidden">
-        <!-- Image shown on game over (either fail or win image based on result) -->
+        <!-- Image shown on game over -->
         <img id="game-over-img" src="images/bad.png" alt="Game Over">
 
-        <!-- Button to restart the game, triggers the restartGame() JS function -->
+        <!-- Button to restart the game -->
         <button onclick="restartGame()">Try Again</button>
     </div>
 
+    <!-- Hanine's special message (for winning only) -->
     <div id="hanine-message" class="hidden">
+        <h1>Congratulations!</h1>
         <p>If you're not Hanine, please close the window.<br>If you are Hanine, click on the box.</p>
         <div id="letter-box">📩 Click me</div>
         <div id="letter-content" class="hidden">
-            <!-- You will write your letter here -->
-            <p id="letter-text">[Your message will appear here]</p>
+            <!-- The letter content will be dynamically loaded here -->
         </div>
     </div>
-    
+
 
     <!-- Link to external JavaScript file containing game logic -->
     <script src="script.js"></script>

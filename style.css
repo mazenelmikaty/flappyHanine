@@ -7,6 +7,19 @@ body {
     background-size: cover;
 }
 
+#start-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the div */
+    text-align: center;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    background: rgba(0, 0, 0, 0.7); /* Optional: semi-transparent background */
+    padding: 20px; /* Optional: add padding for better spacing */
+    border-radius: 10px; /* Optional: rounded corners */
+}
+
 .canvas-wrapper {
     display: flex;
     justify-content: center; /* Center horizontally */
@@ -51,12 +64,12 @@ canvas {
     left: 50%;
     transform: translate(-50%, -50%); /* center the div */
     text-align: center;
-    background: rgba(0, 0, 0, 0.8); /* semi-transparent dark background */
+    background: rgba(0, 0, 0, 0.8); /* dark background */
     padding: 20px;
     border-radius: 10px; /* rounded corners */
 }
 
-/* Style for the image shown on game over screen (bad or win image) */
+/* Style for the image shown on game over screen */
 #game-over-screen img {
     width: 300px;
     border-radius: 10px; /* rounded image corners */
@@ -73,6 +86,26 @@ button {
 /* Utility class to hide elements */
 .hidden {
     display: none;
+}
+
+.flex {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the div */
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
+    padding: 20px; /* Add padding for better spacing */
+    border-radius: 10px; /* Rounded corners */
+    width: 80%; /* Consistent width */
+    max-width: 400px; /* Limit maximum width */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: add shadow for better visibility */
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Title text styling */
@@ -124,7 +157,39 @@ button {
     animation: fadeIn 1s ease-in-out;
 }
 
+/* Style for the letter paper */
+#letter-paper {
+    background: #fff;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 30px;
+    width: 80%;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    font-family: 'Georgia', serif;
+    color: #333;
+    text-align: left;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Fade-in animation for the letter */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Style for the game-over message */
+#game-over-screen p {
+    margin: 10px 0;
+    font-size: 18px;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
