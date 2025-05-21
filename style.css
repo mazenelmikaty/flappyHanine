@@ -3,8 +3,9 @@ body {
     margin: 0;
     overflow: hidden;
     text-align: center;
-    background: url('images/mainBG.jpg');
-    background-size: cover;
+    background: url('images/mainBG.jpg') no-repeat center center; /* Center the background */
+    background-size: cover; /* Ensure the image covers the width while maintaining aspect ratio */
+    background-attachment: fixed; /* Optional: Fix the background for a parallax effect */
 }
 
 #start-message {
@@ -54,6 +55,7 @@ canvas {
     padding: 3px;
     background: linear-gradient(45deg, #ff8a00, #e52e71, #2575fc);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
@@ -173,6 +175,10 @@ button {
     color: #333;
     text-align: left;
     animation: fadeIn 0.5s ease-in-out;
+
+    /* Add scrollable behavior */
+    max-height: 70vh; /* Limit height to 70% of the viewport */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 /* Fade-in animation for the letter */
@@ -194,4 +200,24 @@ button {
     color: white;
     font-family: Arial, sans-serif;
     text-align: center;
+}
+
+/* Adjust the letter width for mobile screens */
+@media (max-width: 768px) {
+    #hanine-message {
+        width: 90%; /* Increase width to take up more space on mobile */
+        max-width: none; /* Remove the max-width restriction */
+        padding: 20px; /* Reduce padding for better spacing */
+        font-size: 16px; /* Adjust font size for readability */
+        border-radius: 10px; /* Slightly smaller border radius */
+    }
+    #letter-paper {
+        width: 90%; /* Increase the width to take up more space on mobile */
+        padding: 20px; /* Adjust padding for better spacing */
+        font-size: 16px; /* Slightly smaller font size for readability */
+    }
+
+    #letter-content {
+        font-size: 16px; /* Adjust font size for mobile readability */
+    }
 }
