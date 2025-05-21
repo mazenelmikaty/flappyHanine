@@ -199,7 +199,7 @@ function update() {
     }
 
     // Check if player has won
-    if (score >= 1) {
+    if (score >= 10) {
         showWinScreen(); // Trigger win screen
         return;
     }
