@@ -132,26 +132,32 @@ function restartGame() {
 
 // Event listener for the letter box (Hanine's message)
 document.getElementById("letter-box").addEventListener("click", () => {
-    // Hide the letter box and show the content
-    document.getElementById("letter-box").classList.add("hidden");
-    document.getElementById("congrats-message").classList.add("hidden");
-    document.getElementById("congrats-parag").classList.add("hidden");
-    const letterContentDiv = document.getElementById("letter-content");
+    const password = prompt("Haha! You thought you were slick?? Enter the password to open the letter:");
 
-    // Fetch the content from the external .txt file
-    fetch("letter-content.txt")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.text();
-        })
+    // Send the password to the PHP script for validation
+    fetch("validate-password.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+    })
+        .then(response => response.json())
         .then(data => {
-            // Insert the fetched content into the div and make it visible
-            letterContentDiv.innerHTML = data;
-            letterContentDiv.classList.remove("hidden");
+            if (data.valid) {
+                // Fetch and display the letter content
+                fetch("letter-content.txt")
+                    .then(response => response.text())
+                    .then(content => {
+                        const letterContentDiv = document.getElementById("letter-content");
+                        letterContentDiv.innerHTML = content;
+                        letterContentDiv.classList.remove("hidden");
+                    });
+            } else {
+                alert("Incorrect password. Please try again.");
+            }
         })
-        .catch(error => console.error("Error loading letter content:", error));
+        .catch(error => console.error("Error validating password:", error));
 });
 
 // Game update loop: handles physics, candel movement, collision, and win/loss logic
