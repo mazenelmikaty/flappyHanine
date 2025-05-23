@@ -130,34 +130,38 @@ function restartGame() {
     showDiv("start-message");
 }
 
-// Event listener for the letter box (Hanine's message)
-document.getElementById("letter-box").addEventListener("click", () => {
-    const password = prompt("Haha! You thought you were slick?? Enter the password to open the letter:");
+// Include a hashed version of the password (SHA-256 hash of "171110")
+const hashedPassword = "582c8e79a2ace9d96e13a5061dcba1177545745f33b2d4c6102b6819943789d0";
 
-    // Send the password to the PHP script for validation
-    fetch("validate-password.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ password }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.valid) {
-                // Fetch and display the letter content
-                fetch("letter-content.txt")
-                    .then(response => response.text())
-                    .then(content => {
-                        const letterContentDiv = document.getElementById("letter-content");
-                        letterContentDiv.innerHTML = content;
-                        letterContentDiv.classList.remove("hidden");
-                    });
-            } else {
-                alert("Incorrect password. Please try again.");
-            }
-        })
-        .catch(error => console.error("Error validating password:", error));
+// Function to hash the user input using SHA-256
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(byte => byte.toString(16).padStart(2, "0")).join("");
+}
+
+// Event listener for the letter box (Hanine's message)
+document.getElementById("letter-box").addEventListener("click", async () => {
+    const password = prompt("Haha! You thought you could just open the letter? Only Hanine can read the letter:");
+
+    // Hash the user input and compare it with the stored hash
+    const hashedInput = await hashPassword(password);
+    if (hashedInput === hashedPassword) {
+        document.getElementById("congrats-message").classList.add("hidden"); // Hide the congrats message
+        document.getElementById("congrats-parag").classList.add("hidden"); // Hide the congrats paragraph
+        document.getElementById("letter-box").classList.add("hidden"); // Hide the letter box
+        fetch("letter-content.txt")
+            .then(response => response.text())
+            .then(content => {
+                const letterContentDiv = document.getElementById("letter-content");
+                letterContentDiv.innerHTML = content;
+                letterContentDiv.classList.remove("hidden");
+            });
+    } else {
+        alert("Incorrect password. Please try again.");
+    }
 });
 
 // Game update loop: handles physics, candel movement, collision, and win/loss logic
